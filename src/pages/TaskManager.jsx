@@ -4,7 +4,7 @@ import supabase from "../config/supabaseClient";
 function TaskManager() {
   let [newTask, setNewTask] = useState({ title: "", description: "" });
   let [tasks, setTasks] = useState([]);
-
+  let [newDescription, setDescription] = useState("");
   // Function to fetch tasks from Supabase
   let fetchTasks = async () => {
     // Select all tasks from the "tasks" table
@@ -75,25 +75,59 @@ function TaskManager() {
     }
   };
 
-  return (
-    <div className="bg-[#232b2b] h-screen flex flex-col items-center justify-center">
-      <div>
-        <h1 className="text-white text-3xl font-semibold">Task Manager CRUD</h1>
-        <div>
-          <form onSubmit={handleSubmit} className="flex flex-col items-center">
-            <input
-              className="mt-5 p-2 rounded-md text-xl text-white bg-[#3f3f3f]"
-              type="text"
-              placeholder="Task Title"
-              onChange={handletileChange}
-            />
+  let handleEdit = async (id) => {
+    let { error } = await supabase
+      .from("tasks")
+      .update({ description: newDescription })
+      .eq("id", id);
+    if (error) {
+      console.log("Error updating data:", error);
+      return;
+    } else {
+      console.log("Data updated successfully!");
+    }
+  };
 
-            <input
-              className="mt-5 p-2 rounded-md text-xl text-white bg-[#3f3f3f]"
-              type="text"
-              placeholder="Description"
-              onChange={handleDescriptionChange}
-            />
+  function handleDescriptionUpdate(e) {
+    
+      setDescription(e.target.value);
+
+  }
+    return (
+      <div className="bg-[#232b2b] h-screen flex flex-col items-center justify-center">
+        <div>
+          <h1 className="text-white text-3xl font-semibold">
+            Task Manager CRUD
+          </h1>
+          <div>
+            <form
+              onSubmit={handleSubmit}
+              className="flex flex-col items-center"
+            >
+              <input
+                className="mt-5 p-2 rounded-md text-xl text-white bg-[#3f3f3f]"
+                type="text"
+                placeholder="Task Title"
+                onChange={handletileChange}
+              />
+
+              <input
+                className="mt-5 p-2 rounded-md text-xl text-white bg-[#3f3f3f]"
+                type="text"
+                placeholder="Description"
+                onChange={handleDescriptionChange}
+              />
+              <button
+                className="mt-5 p-2 rounded-md text-xl text-white bg-[#3f3f3f]
+            transition-all duration-150
+            hover:bg-[#525252]
+            active:scale-95
+           active:bg-[#2f2f2f]
+            active:shadow-inner"
+              >
+                Add Task
+              </button>
+            </form>
             <button
               className="mt-5 p-2 rounded-md text-xl text-white bg-[#3f3f3f]
             transition-all duration-150
@@ -101,61 +135,59 @@ function TaskManager() {
             active:scale-95
            active:bg-[#2f2f2f]
             active:shadow-inner"
+              onClick={clearForm}
             >
-              Add Task
+              Clear
             </button>
-          </form>
-          <button
-            className="mt-5 p-2 rounded-md text-xl text-white bg-[#3f3f3f]
-            transition-all duration-150
-            hover:bg-[#525252]
-            active:scale-95
-           active:bg-[#2f2f2f]
-            active:shadow-inner"
-            onClick={clearForm}
-          >
-            Clear
-          </button>
-        </div>
-        {/* Displaying the list of tasks 
-        using map to loop through them */}
-        {tasks.map((task) => (
-          <div className="outline outline-white w-auto h-auto mt-10 rounded-md">
-            <div className="flex flex-col items-center">
-              <h2 className="text-white text-2xl font-semibold m-2">
-                {task.title}
-              </h2>
-              <h2 className="text-white text-xl  m-2">{task.description}</h2>
-            </div>
-            <div className="flex justify-evenly p-5">
-              <button
-                className="mt-5 p-2 rounded-md text-xl text-white bg-[#3f3f3f]
-            transition-all duration-150
-            hover:bg-[#525252]
-            active:scale-95
-           active:bg-[#2f2f2f]
-            active:shadow-inner"
-              >
-                Edit
-              </button>
-
-              <button
-                className="mt-5 p-2 rounded-md text-xl text-white bg-[#3f3f3f]
-            transition-all duration-150
-            hover:bg-[#525252]
-            active:scale-95
-           active:bg-[#2f2f2f]
-            active:shadow-inner"
-                onClick={() => handleDelete(task.id)}
-              >
-                Delete
-              </button>
-            </div>
           </div>
-        ))}
+          {/* Displaying the list of tasks 
+        using map to loop through them */}
+          {tasks.map((task) => (
+            <div className="outline outline-white w-auto h-auto mt-10 rounded-md">
+              <div className="flex flex-col items-center">
+                <h2 className="text-white text-2xl font-semibold m-2">
+                  {task.title}
+                </h2>
+                <h2 className="text-white text-xl  m-2">{task.description}</h2>
+              </div>
+              <div>
+                <input
+                  className="mt-5 p-2 rounded-md text-xl text-white bg-[#3f3f3f]"
+                  placeholder="Updated description..."
+                  onChange={handleDescriptionUpdate}
+                />
+              </div>
+              <div className="flex justify-evenly p-5">
+                <button
+                  className="mt-5 p-2 rounded-md text-xl text-white bg-[#3f3f3f]
+            transition-all duration-150
+            hover:bg-[#525252]
+            active:scale-95
+           active:bg-[#2f2f2f]
+            active:shadow-inner"
+                  onClick={() => handleEdit(task.id)}
+                >
+                  Edit
+                </button>
+
+                <button
+                  className="mt-5 p-2 rounded-md text-xl text-white bg-[#3f3f3f]
+            transition-all duration-150
+            hover:bg-[#525252]
+            active:scale-95
+           active:bg-[#2f2f2f]
+            active:shadow-inner"
+                  onClick={() => handleDelete(task.id)}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
+
 
 export default TaskManager;
