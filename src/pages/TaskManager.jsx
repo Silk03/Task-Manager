@@ -57,14 +57,23 @@ function TaskManager() {
   function clearForm() {
     setNewTask({ title: "", description: "" });
   }
-    // Fetch tasks when the component mounts
-    // this useEffect runs when the component is first rendered
-    // to display the existing tasks
+  // Fetch tasks when the component mounts
+  // this useEffect runs when the component is first rendered
+  // to display the existing tasks
+
   useEffect(() => {
     fetchTasks();
   }, []);
 
-  
+  let handleDelete = async (id) => {
+    let { error } = await supabase.from("tasks").delete().eq("id", id);
+    if (error) {
+      console.log("Error deleting data:", error);
+      return;
+    } else {
+      console.log("Data deleted successfully!");
+    }
+  };
 
   return (
     <div className="bg-[#232b2b] h-screen flex flex-col items-center justify-center">
@@ -113,7 +122,9 @@ function TaskManager() {
         {tasks.map((task) => (
           <div className="outline outline-white w-auto h-auto mt-10 rounded-md">
             <div className="flex flex-col items-center">
-              <h2 className="text-white text-2xl font-semibold m-2">{task.title}</h2>
+              <h2 className="text-white text-2xl font-semibold m-2">
+                {task.title}
+              </h2>
               <h2 className="text-white text-xl  m-2">{task.description}</h2>
             </div>
             <div className="flex justify-evenly p-5">
@@ -135,6 +146,7 @@ function TaskManager() {
             active:scale-95
            active:bg-[#2f2f2f]
             active:shadow-inner"
+                onClick={() => handleDelete(task.id)}
               >
                 Delete
               </button>
