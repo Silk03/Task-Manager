@@ -1,8 +1,28 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import supabase from "../config/supabaseClient";
 
 function TaskManager() {
   let [newTask, setNewTask] = useState({ title: "", description: "" });
+  let [tasks, setTasks] = useState([]);
+
+  // Function to fetch tasks from Supabase
+  let fetchTasks = async () => {
+    // Select all tasks from the "tasks" table
+    // This line of code connects to supabase and fetches the tasks
+    let { data, error } = await supabase
+      .from("tasks")
+      .select("*")
+      .order("id", { ascending: true });
+
+    if (error) {
+      console.log("Error fetching data:", error);
+      return;
+    } else {
+      console.log("Data fetched successfully:", data);
+    }
+
+    setTasks(data);
+  };
 
   // Handlers for input changes
   function handletileChange(e) {
@@ -22,17 +42,29 @@ function TaskManager() {
   let handleSubmit = async (e) => {
     e.preventDefault();
     // Insert new task into the "tasks" table in Supabase
+    // this line of code connected to supabase and adds the new task
     let { error } = await supabase.from("tasks").insert(newTask).single();
     // Log any error that occurs during insertion
     // Check if there was an error during insertion
     if (error) {
       console.log("Error inserting data:", error);
+      return;
     } else {
       console.log("Data inserted successfully!");
     }
-
-    setNewTask({ title: "", description: "" });
   };
+
+  function clearForm() {
+    setNewTask({ title: "", description: "" });
+  }
+    // Fetch tasks when the component mounts
+    // this useEffect runs when the component is first rendered
+    // to display the existing tasks
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  
 
   return (
     <div className="bg-[#232b2b] h-screen flex flex-col items-center justify-center">
@@ -64,37 +96,51 @@ function TaskManager() {
               Add Task
             </button>
           </form>
-        </div>
-
-        <div className="outline outline-white w-auto h-auto mt-10 rounded-md">
-          <div className="flex flex-col items-center">
-            <h2 className="text-white text-2xl font-semibold m-2">Title</h2>
-            <h2 className="text-white text-xl  m-2">Description</h2>
-          </div>
-          <div className="flex justify-evenly p-5">
-            <button
-              className="mt-5 p-2 rounded-md text-xl text-white bg-[#3f3f3f]
+          <button
+            className="mt-5 p-2 rounded-md text-xl text-white bg-[#3f3f3f]
             transition-all duration-150
             hover:bg-[#525252]
             active:scale-95
            active:bg-[#2f2f2f]
             active:shadow-inner"
-            >
-              Edit
-            </button>
-
-            <button
-              className="mt-5 p-2 rounded-md text-xl text-white bg-[#3f3f3f]
+            onClick={clearForm}
+          >
+            Clear
+          </button>
+        </div>
+        {/* Displaying the list of tasks 
+        using map to loop through them */}
+        {tasks.map((task) => (
+          <div className="outline outline-white w-auto h-auto mt-10 rounded-md">
+            <div className="flex flex-col items-center">
+              <h2 className="text-white text-2xl font-semibold m-2">{task.title}</h2>
+              <h2 className="text-white text-xl  m-2">{task.description}</h2>
+            </div>
+            <div className="flex justify-evenly p-5">
+              <button
+                className="mt-5 p-2 rounded-md text-xl text-white bg-[#3f3f3f]
             transition-all duration-150
             hover:bg-[#525252]
             active:scale-95
            active:bg-[#2f2f2f]
             active:shadow-inner"
-            >
-              Delete
-            </button>
+              >
+                Edit
+              </button>
+
+              <button
+                className="mt-5 p-2 rounded-md text-xl text-white bg-[#3f3f3f]
+            transition-all duration-150
+            hover:bg-[#525252]
+            active:scale-95
+           active:bg-[#2f2f2f]
+            active:shadow-inner"
+              >
+                Delete
+              </button>
+            </div>
           </div>
-        </div>
+        ))}
       </div>
     </div>
   );
