@@ -1,11 +1,26 @@
 import supabase from './config/supabaseClient'
 import { Route, Routes } from 'react-router'
+import { useState, useEffect} from 'react'
 import TaskManager from './pages/TaskManager'
 import LogIn from './pages/LogIn'
 import SignIn from './pages/SignIn'
+
 function App() {
   
-  console.log(supabase)
+  let [session, setSession] = useState(null)
+
+  let fetchSession = async () => {
+    let currentSession = await supabase.auth.getSession()
+    console.log(currentSession)
+    setSession(currentSession.data)
+    console.log(session)
+    
+  }
+
+  useEffect(() => {
+    fetchSession()
+
+  }, [])
 
   return (
 
