@@ -1,12 +1,45 @@
-# React + Vite
+📝 Task Manager CRUD App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple Task Manager CRUD application built using React + Vite, styled with Tailwind CSS, and powered by Supabase as the backend database.
 
-Currently, two official plugins are available:
+This project demonstrates how to perform Create, Read, Update, and Delete (CRUD) operations using Supabase in a modern React setup.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+🚀 Tech Stack
 
-## Expanding the ESLint configuration
+React – Frontend UI
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Vite – Fast development build tool
+
+Tailwind CSS – Utility-first styling
+
+Supabase – Backend (PostgreSQL + API)
+
+JavaScript (ES6+)
+
+✨ Features
+
+✅ Add new tasks (title & description)
+
+📄 Fetch and display tasks from Supabase
+
+✏️ Update task descriptions
+
+🗑 Delete tasks
+
+⚡ Real-time async database operations
+
+🎨 Clean and responsive UI with Tailwind
+
+🧠 What I Learned
+
+Connecting a React app to Supabase
+
+Using useState and useEffect for state management
+
+Performing CRUD operations with Supabase
+
+Handling form submissions in React
+
+Styling components using Tailwind CSS
+
+Organizing a Vite + React project
