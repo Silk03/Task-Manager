@@ -1,6 +1,6 @@
-# 📝 Task Manager CRUD App
+# 📝 Task Manager
 
-A simple **Task Manager CRUD application** built using **React + Vite**, styled with **Tailwind CSS**, and powered by **Supabase** as the backend database.
+A simple **Task Manager** built using **React + Vite**, styled with **Tailwind CSS**, and powered by **Supabase** as the backend database.
 
 This project demonstrates how to perform **Create, Read, Update, and Delete (CRUD)** operations using Supabase in a modern React setup.
 
